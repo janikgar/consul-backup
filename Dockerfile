@@ -1,4 +1,4 @@
-FROM hashicorp/consul:1.15 AS consul
+FROM hashicorp/consul:1.19 AS consul
 FROM minio/mc:latest as minio
 
 FROM alpine:3.17
