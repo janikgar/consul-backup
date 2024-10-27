@@ -1,12 +1,11 @@
-FROM hashicorp/consul:1.19 AS consul
-FROM minio/mc:latest as minio
+FROM busybox as builder
 
-FROM alpine:3.17
+WORKDIR /tmp
 
-COPY --from=minio /usr/bin/mc /usr/bin/
-COPY --from=consul /bin/consul /bin/
+ADD https://releases.hashicorp.com/consul/1.19.2/consul_1.19.2_linux_arm64.zip /tmp/consul.zip
 
-ADD --chmod=0755 entrypoint.sh /
-RUN apk update
+RUN unzip /tmp/consul.zip
 
-ENTRYPOINT ["/entrypoint.sh"]
+FROM minio/mc:latest
+
+COPY --from=builder /tmp/consul /usr/local/bin/consul
